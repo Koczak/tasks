@@ -1,10 +1,10 @@
-ć:root {
+:root {
   --primary-color: #3b82f6;
   --primary-hover: #2563eb;
   --danger-color: #ef4444;
   --danger-hover: #dc2626;
-  --success-color: #22c55e;
-  --success-hover: #16a34a;
+  --success-color: #07a240;
+  --success-hover: #026827;
   --background-color: #f8fafc;
   --card-background: #ffffff;
   --text-primary: #1e293b;
