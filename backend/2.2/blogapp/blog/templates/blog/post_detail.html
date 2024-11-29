@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %} {% block content %}
+<article class="card">
+	<div class="card-body">
+		<h2>{{ object.title }}</h2>
+		<p class="text-muted">
+			By {{ object.author }} on {{ object.created_date|date:"F d, Y" }}
+		</p>
+		<p>{{ object.content }}</p>
+		{% if object.author == user %}
+		<a class="btn btn-secondary" href="{% url 'post-update' object.pk %}"
+			>Update</a
+		>
+		<a class="btn btn-danger" href="{% url 'post-delete' object.pk %}"
+			>Delete</a
+		>
+		{% endif %}
+	</div>
+</article>
+{% endblock content %}

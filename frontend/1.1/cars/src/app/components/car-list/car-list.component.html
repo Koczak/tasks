@@ -1,0 +1,131 @@
+<div class="container animate-fade-in">
+  <div class="header">
+    <div class="header-content">
+      <h2>Your Vehicles</h2>
+      <p class="subtitle">Manage your car collection</p>
+    </div>
+    <button routerLink="/add-car" class="add-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Add New Car
+    </button>
+  </div>
+
+  <div class="car-grid">
+    @for (car of cars; track car.id) {
+    <div class="car-card animate-fade-in">
+      <div class="car-header">
+        <h3>{{ car.make }} {{ car.model }}</h3>
+        <div class="year-badge">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          {{ car.year }}
+        </div>
+      </div>
+      <div class="car-info">
+        <p class="registration">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+          </svg>
+          {{ car.registrationNumber || "No registration" }}
+        </p>
+        <p class="added-date">Added {{ car.createdAt | date }}</p>
+      </div>
+      <div class="card-actions">
+        <button [routerLink]="['/car', car.id]" class="details-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          View Details
+        </button>
+        <button (click)="deleteCar(car.id)" class="delete-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+    } @empty {
+    <div class="empty-state">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+      </svg>
+      <h3>No cars yet</h3>
+      <p>Add your first car to get started!</p>
+      <button routerLink="/add-car" class="add-btn">Add New Car</button>
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,324 @@
+<div class="details-container">
+  @if (car) {
+  <div class="car-info">
+    <div class="header">
+      <div class="header-content">
+        <h2>{{ car.make }} {{ car.model }}</h2>
+        <span class="year-badge">{{ car.year }}</span>
+      </div>
+      <button class="back-btn" (click)="goBack()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to List
+      </button>
+    </div>
+
+    <div class="info-card">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Registration</span>
+          <span class="info-value">{{ car.registrationNumber || "N/A" }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Added on</span>
+          <span class="info-value">{{ car.createdAt | date }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Service Records</span>
+          <span class="info-value">{{ services.length }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Total Cost</span>
+          <span class="info-value total-cost"
+            >${{ calculateTotalMaintenanceCost() }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-section">
+    <div class="section-header">
+      <div class="header-content">
+        <h3>Service History</h3>
+        <p class="subtitle">Track all maintenance records</p>
+      </div>
+      <button (click)="toggleServiceForm()" class="add-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          @if (!showServiceForm) {
+          <g>
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </g>
+          } @else {
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+          }
+        </svg>
+        {{ showServiceForm ? "Cancel" : "Add Service Record" }}
+      </button>
+    </div>
+
+    @if (showServiceForm) {
+    <form
+      [formGroup]="serviceForm"
+      (ngSubmit)="addService()"
+      class="service-form"
+    >
+      <div class="form-row">
+        <div class="form-field">
+          <label for="date">Service Date</label>
+          <input type="date" id="date" formControlName="date" />
+          @if (serviceForm.get('date')?.errors?.['required'] &&
+          serviceForm.get('date')?.touched) {
+          <span class="error">Date is required</span>
+          }
+        </div>
+      </div>
+
+      <div formArrayName="parts" class="parts-section">
+        <div class="parts-header">
+          <h4>Parts and Services</h4>
+          <button type="button" (click)="addPart()" class="add-part-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Part/Service
+          </button>
+        </div>
+
+        @for (part of parts.controls; track $index) {
+        <div [formGroupName]="$index" class="part-item animate-fade-in">
+          <div class="part-field">
+            <input placeholder="Part/Service name" formControlName="name" />
+            @if (part.get('name')?.errors?.['required'] &&
+            part.get('name')?.touched) {
+            <span class="error">Name is required</span>
+            }
+          </div>
+
+          <div class="part-field">
+            <input
+              type="number"
+              placeholder="Cost ($)"
+              formControlName="cost"
+            />
+            @if (part.get('cost')?.errors?.['required'] &&
+            part.get('cost')?.touched) {
+            <span class="error">Cost is required</span>
+            } @if (part.get('cost')?.errors?.['min']) {
+            <span class="error">Cost must be positive</span>
+            }
+          </div>
+
+          <div class="part-field">
+            <input
+              type="number"
+              placeholder="Quantity"
+              formControlName="quantity"
+            />
+            @if (part.get('quantity')?.errors?.['required'] &&
+            part.get('quantity')?.touched) {
+            <span class="error">Quantity is required</span>
+            } @if (part.get('quantity')?.errors?.['min']) {
+            <span class="error">Quantity must be at least 1</span>
+            }
+          </div>
+
+          <button type="button" (click)="removePart($index)" class="remove-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        } @if (parts.length === 0) {
+        <p class="no-parts">Add at least one part or service</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="notes">Notes</label>
+        <textarea
+          id="notes"
+          formControlName="notes"
+          rows="3"
+          placeholder="Add any additional notes about the service"
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="toggleServiceForm()" class="cancel-btn">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="!serviceForm.valid || parts.length === 0"
+          class="submit-btn"
+        >
+          Save Service Record
+        </button>
+      </div>
+    </form>
+    }
+
+    <div class="service-records">
+      @for (service of sortedServices; track service.id) {
+      <div class="service-card animate-fade-in">
+        <div class="service-header">
+          <div class="service-date">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>{{ service.date | date : "mediumDate" }}</span>
+          </div>
+          <span class="total-cost">${{ service.totalCost.toFixed(2) }}</span>
+        </div>
+
+        <div class="parts-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Part/Service</th>
+                <th>Cost</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (part of service.parts; track part.name) {
+              <tr>
+                <td>{{ part.name }}</td>
+                <td>${{ part.cost.toFixed(2) }}</td>
+                <td>{{ part.quantity }}</td>
+                <td>${{ (part.cost * part.quantity).toFixed(2) }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (service.notes) {
+        <div class="service-notes">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path>
+          </svg>
+          <p>{{ service.notes }}</p>
+        </div>
+        }
+      </div>
+      } @empty {
+      <div class="empty-state">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+        <h3>No service records</h3>
+        <p>Add your first service record to start tracking maintenance!</p>
+      </div>
+      }
+    </div>
+  </div>
+  } @else {
+  <div class="error-container">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="48"
+      height="48"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <h2>Car Not Found</h2>
+    <p>The requested car could not be found.</p>
+    <button (click)="goBack()" class="back-btn">Back to List</button>
+  </div>
+  }
+</div>

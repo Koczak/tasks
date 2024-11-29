@@ -1,0 +1,96 @@
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+*.pyc
+__pycache__/
+build/
+*.egg-info/
+
+# Dependencies
+node_modules
+/node_modules
+**/node_modules
+/.env
+/.venv
+env/
+ENV/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Testing
+/coverage
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Database
+*.sqlite3
+*.db
+
+# Angular specific
+/.angular/cache
+.angular/cache
+**/.angular/cache
+.sass-cache/
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Migration files (optional, depending on your needs)
+# */migrations/*.py
+# !*/migrations/__init__.py

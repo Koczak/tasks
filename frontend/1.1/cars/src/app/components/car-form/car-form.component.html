@@ -1,0 +1,171 @@
+<div class="container animate-fade-in">
+  <div class="header">
+    <div class="header-content">
+      <h2>Add New Vehicle</h2>
+      <p class="subtitle">Enter your car details</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="make">
+            <span class="label-text">Make</span>
+            <input
+              id="make"
+              type="text"
+              formControlName="make"
+              list="car-makes"
+              placeholder="Enter car make"
+            />
+          </label>
+          @if (carForm.get('make')?.errors?.['required'] &&
+          carForm.get('make')?.touched) {
+          <span class="error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Make is required
+          </span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="model">
+            <span class="label-text">Model</span>
+            <input
+              id="model"
+              type="text"
+              formControlName="model"
+              placeholder="Enter model"
+            />
+          </label>
+          @if (carForm.get('model')?.errors?.['required'] &&
+          carForm.get('model')?.touched) {
+          <span class="error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Model is required
+          </span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="year">
+            <span class="label-text">Year</span>
+            <input
+              id="year"
+              type="number"
+              formControlName="year"
+              placeholder="Enter year"
+            />
+          </label>
+          @if (carForm.get('year')?.errors?.['required'] &&
+          carForm.get('year')?.touched) {
+          <span class="error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Year is required
+          </span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="registrationNumber">
+            <span class="label-text">Registration Number (optional)</span>
+            <input
+              id="registrationNumber"
+              type="text"
+              formControlName="registrationNumber"
+              placeholder="Enter registration number"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="goBack()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Cancel
+        </button>
+        <button type="submit" class="submit-btn" [disabled]="!carForm.valid">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+            ></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Save Car
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<datalist id="car-makes">
+  @for (make of CAR_MAKES; track make) {
+  <option [value]="make"></option>
+  }
+</datalist>

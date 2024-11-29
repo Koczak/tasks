@@ -1,0 +1,175 @@
+<div class="container">
+  <a (click)="goBack()" class="back-button" style="cursor: pointer"
+    >← Back to Pokédex</a
+  >
+
+  @if (loading) {
+  <app-loader />
+  } @else if (pokemon) {
+  <div class="pokemon-details" @fadeSlide>
+    <div class="image-section">
+      <div class="image-gallery">
+        <div class="main-image-container">
+          <img [src]="mainImage" [alt]="pokemon.name" class="main-image" />
+        </div>
+        <div class="alternative-images">
+          <div
+            class="alternative-image-container"
+            [class.active]="
+              mainImage ===
+              pokemon.sprites.other['official-artwork'].front_default
+            "
+            (click)="
+              changeMainImage(
+                pokemon.sprites.other['official-artwork'].front_default
+              )
+            "
+          >
+            <img
+              [src]="pokemon.sprites.other['official-artwork'].front_default"
+              [alt]="pokemon.name"
+            />
+          </div>
+          <div
+            class="alternative-image-container"
+            *ngIf="pokemon.sprites.other.dream_world.front_default"
+            [class.active]="
+              mainImage === pokemon.sprites.other.dream_world.front_default
+            "
+            (click)="
+              changeMainImage(pokemon.sprites.other.dream_world.front_default)
+            "
+          >
+            <img
+              [src]="pokemon.sprites.other.dream_world.front_default"
+              [alt]="pokemon.name"
+            />
+          </div>
+          <div
+            class="alternative-image-container"
+            *ngIf="pokemon.sprites.other.home.front_default"
+            [class.active]="
+              mainImage === pokemon.sprites.other.home.front_default
+            "
+            (click)="changeMainImage(pokemon.sprites.other.home.front_default)"
+          >
+            <img
+              [src]="pokemon.sprites.other.home.front_default"
+              [alt]="pokemon.name"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="header-info">
+        <h1>{{ pokemon.name | titlecase }}</h1>
+        <span class="pokemon-number">#{{ pokemon.order }}</span>
+      </div>
+
+      <div class="types">
+        @for (type of pokemon.types; track type.type.name) {
+        <span class="type" [attr.data-type]="type.type.name">
+          {{ type.type.name }}
+        </span>
+        }
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h4>Height</h4>
+          <p>{{ pokemon.height / 10 }}m</p>
+        </div>
+        <div class="stat-card">
+          <h4>Weight</h4>
+          <p>{{ pokemon.weight / 10 }}kg</p>
+        </div>
+        <div class="stat-card">
+          <h4>Base Experience</h4>
+          <p>{{ pokemon.base_experience }}</p>
+        </div>
+        <div class="stat-card">
+          <h4>ID</h4>
+          <p>#{{ pokemon.id.toString().padStart(3, "0") }}</p>
+        </div>
+      </div>
+
+      <div class="base-stats">
+        <h3>Base Stats</h3>
+        <div class="stats-bars">
+          @for (stat of pokemon.stats; track stat.stat.name) {
+          <div class="stat-bar">
+            <span class="stat-name">{{ stat.stat.name | titlecase }}</span>
+            <div class="bar">
+              <div
+                class="bar-fill"
+                [style.width]="(stat.base_stat / 255) * 100 + '%'"
+              >
+                {{ stat.base_stat }}
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="abilities-section">
+        <h3>Abilities</h3>
+        <div class="abilities-grid">
+          @for (ability of pokemon.abilities; track ability.ability.name) {
+          <div class="ability-card">
+            {{ ability.ability.name | titlecase }}
+            @if (ability.is_hidden) {
+            <span class="hidden-badge">Hidden</span>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="additional-info">
+        <h3>Additional Information</h3>
+
+        <!-- Moves Section -->
+        <div class="moves-section">
+          <h4>Signature Moves</h4>
+          <div class="moves-grid">
+            @for (move of pokemon.moves.slice(0, 4); track move.move.name) {
+            <div class="move-card">
+              {{ move.move.name | titlecase }}
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Game Appearances -->
+        <div class="games-section">
+          <h4>Game Appearances</h4>
+          <div class="games-grid">
+            @for (game of pokemon.game_indices.slice(0, 6); track
+            game.version.name) {
+            <div class="game-badge">
+              {{ game.version.name | titlecase }}
+            </div>
+            }
+          </div>
+        </div>
+
+        @if (pokemon.held_items.length > 0) {
+        <div class="held-items-section">
+          <h4>Held Items</h4>
+          <div class="items-grid">
+            @for (item of pokemon.held_items; track item.item.name) {
+            <div class="item-badge">
+              {{ item.item.name | titlecase }}
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
